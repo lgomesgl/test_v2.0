@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    # 'account.apps.AccountConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -135,4 +136,4 @@ LOGIN_URL = 'http://127.0.0.1:8000/admin/login/?next=/admin/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# AUTH_USER_MODEL = 'core.CustomUser'
+AUTH_USER_MODEL = 'core.CustomUser'

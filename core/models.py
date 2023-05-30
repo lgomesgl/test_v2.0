@@ -1,17 +1,14 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+# from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 
-# Create your models here.
-'''
-    -- att the columns in tables
-    -- put the BLOB fields in tables
-    -- test the 1xN/NxN relations
-    -- view on_delete types
-'''
+# Create your models here
 class Base(models.Model):
+    '''
+    Table with some ordinary columns that we wanted in some tables. 
+    '''
     creates_date = models.DateField(name='Creates date', auto_now_add=True)
     modify_date = models.DateField(name='Modify date', auto_now=True)
-    # modify_user = models.CharField()
     
     class Meta:
         abstract = True
@@ -57,7 +54,7 @@ class People(Base):
     
     name = models.CharField(max_length=100)
     sex = models.CharField(name='Sex', max_length=1, choices=SEX)
-    post = models.CharField(name='Post', max_length=100, choices=POST)
+    post = models.CharField(name='Post', max_length=50, choices=POST)
     projeto = models.ManyToManyField(Project)
     
     def __str__(self):
@@ -74,7 +71,7 @@ class Email(Base):
     ]
      
     type = models.CharField(max_length=15, choices=TYPE)
-    email = models.EmailField(max_length=30)
+    email = models.EmailField(max_length=50)
     person = models.ForeignKey(People, on_delete=models.CASCADE)
     
     def __str__(self):
@@ -99,6 +96,9 @@ class ReasearchLines(Base):
     person = models.ManyToManyField(People)
     
     def __str__(self):
+        '''
+            The ReasearchLines can be separeted with two properties(phase and point)
+        '''
         if not self.phase == '':
             return '%s-%s' %(self.name, self.phase)
         else: 
@@ -165,7 +165,7 @@ class Articles(Base):
     name = models.CharField(max_length=50)
     link_path = models.CharField(max_length=100)
     
-    reasearchline = models.ForeignKey(ReasearchLines, on_delete=models.CASCADE)
+    reasearchline = models.ForeignKey(ReasearchLines, null=True, blank=True, on_delete=models.CASCADE)
     metadata = models.ManyToManyField(Metadata)
     # file = models.ManyToManyField(Files)
     # videos = models.ManyToManyField(Videos)
@@ -178,24 +178,56 @@ class Articles(Base):
         verbose_name = 'Articles'
         verbose_name_plural = 'Articles'     
         
-# class CustomUser(AbstractUser):
-#     TYPE = [
-#         ('Pessoal','Pessoal'),
-#         ('Educacional','Educacional'),     
-#     ]
+class CustomUserManager(BaseUserManager):
+    """
+    Custom user model manager where email is the unique identifiers
+    for authentication instead of usernames.
+    """
+    def create_user(self, email, password, **extra_fields):
+        """
+        Create and save a user with the given email and password.
+        """
+        if not email:
+            raise ValueError("The Email must be set")
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def create_superuser(self, email, password, **extra_fields):
+        """
+        Create and save a SuperUser with the given email and password.
+        """
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True")
+        
+        return self.create_user(email, password, **extra_fields)
     
-#     POST = [
-#         ('Professor Doutor','Professor Doutor'),
-#         ('Professor Adjunto','Professor Adjunto'),
-#         ('Pesquisador','Pesquisador'),
-#         ('Pós-Doc','Pós-Doc'),
-#         ('Doutorando','Doutorando'),
-#         ('Mestrando','Mestrando'),
-#         ('Iniciação científica','Iniciação científica'),
-#     ]
+class CustomUser(AbstractUser):
+    GROUP = [
+        ('Admin','Admin'),
+        ('SponsorCompony','SponsorCompony'),
+        ('IC','IC'),
+    ]
     
-#     email_type = models.CharField(max_length=15, choices=TYPE)
-#     post_type = models.CharField(max_length=30, choices=POST)
+    username = None
+    email = models.EmailField("email address", unique=True)
+    group = models.CharField(max_length=50, blank=True, choices=GROUP)
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'group']
+
+    objects = CustomUserManager()
+
+    def __str__(self):
+        return self.email
     
     
     

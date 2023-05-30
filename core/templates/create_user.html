@@ -4,12 +4,12 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Criação de usuários-BCDS</title>
+    <title>Create User-BCDS</title>
     {% bootstrap_css %}
 </head>
 <body>
     <div class="container">
-        <h1>Criação de usuários</h1>
+        <h1>Create User</h1>
         {% bootstrap_messages %}
 
         <form action="{% url 'create_user' %}" method="post" class="form" autocomplete="off">
@@ -17,7 +17,7 @@
             {% bootstrap_form form %}
             {% comment %} {{ form|crispy}} {% endcomment %}
             {% buttons %}
-                <button type="submit" class="btn btn-primary">Cadastrar</button>
+                <button type="submit" class="btn btn-primary">Register</button>
             {% endbuttons %}
 
         </form>

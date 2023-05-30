@@ -1,9 +1,26 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import Project, SponsorCompany, People, Email, ReasearchLines, Videos, Metadata, Files, Articles
+from .models import Project, SponsorCompany, People, Email, ReasearchLines, Videos, Metadata, Files, Articles, CustomUser
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 # Register your models here.
+@admin.register(CustomUser)
+class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
+    model = CustomUser
+    list_display = ["email", "first_name", "last_name", "group", "is_superuser"]
+    list_filter = ["group", "is_superuser"]
+    fieldsets = [
+        (None, {'fields': ('email', 'password')}),
+        ('Informações Pessoais', {'fields': ('first_name', 'last_name', 'group')}),
+        ('Permissôes', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Data Importantes', {'fields': ('last_login', 'date_joined')}),   
+    ]
+    search_fields = ["email", "first_name"]
+    ordering = ["email"] # necessary because the django order default by username, and we change the username for email.
+    
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ['name', 'Over date']
@@ -49,9 +66,3 @@ class FilesAdmin(admin.ModelAdmin):
 class ArticlesAdmin(admin.ModelAdmin):
     list_display = ['name']
     search_fields = ['name']
-
-# @admin.register(CustomUser)
-# class CustomUser(UserAdmin):
-#     pass
-    
-    
