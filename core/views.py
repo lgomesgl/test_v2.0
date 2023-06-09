@@ -6,7 +6,7 @@ from django.views.generic import TemplateView, CreateView, UpdateView, DetailVie
 
 from django.urls import reverse_lazy
 
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser
 
 # Create your views here.
@@ -38,6 +38,20 @@ class CreateUserCreateView(CreateView):
     template_name = 'create_user.html'
     model = CustomUser
     form_class = CustomUserCreationForm
+    success_url = reverse_lazy('create_user')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    
+    def form_valid(self, form):
+        messages.success(self.request, 'New registered user')
+        return super(CreateUserCreateView, self).form_valid(form)
+    
+class CreateUserUpdateView(UpdateView):
+    template_name = 'create_user.html'
+    model = CustomUser
+    form_class = CustomUserChangeForm
     success_url = reverse_lazy('create_user')
     
     def get_context_data(self, **kwargs):

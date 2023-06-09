@@ -1,6 +1,7 @@
 from django.db import models
 # from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import Group
 
 # Create your models here
 class Base(models.Model):
@@ -211,6 +212,11 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
     
 class CustomUser(AbstractUser):
+    '''
+        Show all groups that we have in group django table 
+        *Admin can be not necessary
+    '''
+    # GROUP = Group.objects.all() ## get all groups in django database
     GROUP = [
         ('Admin','Admin'),
         ('SponsorCompony','SponsorCompony'),
