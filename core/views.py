@@ -1,13 +1,15 @@
+from typing import Any, Dict, Type
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin 
 from django.contrib.auth.decorators import permission_required
+from django.forms.models import BaseModelForm
 from django.views.generic import TemplateView, CreateView, UpdateView, DetailView
-
+from django.db import connection, models
 from django.urls import reverse_lazy
 
-from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser
+from .forms import CustomUserCreationForm, CustomUserChangeForm, MetadataModelForm
+from .models import CustomUser, Metadata
 
 # Create your views here.
 
@@ -24,7 +26,7 @@ class HomePageTemplateView(TemplateView):
         context['link_admin'] = '/admin'
         context['link_create_user'] = '/create_user'
         context['link_about'] = '/about'
-        context['link_tabelas'] = '/tabelas'
+        context['link_tabelas'] = '/tables'
         context['link_usuarios'] = '/users'
         return context 
     
@@ -72,8 +74,48 @@ class AboutTemplateView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['link_admin'] = '/admin'
+        context['link_home'] = ''
+        context['link_tables'] = '/tables'
+        return context 
+    
+## Tables
+'''
+    Show the tables and link with create/update/delete instances
+'''
+class TablesTemplateView(TemplateView):
+    template_name = 'tables.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['link_home'] = ''
+        context['link_about'] = '/about'
+        context['link_admin'] = '/admin'
+        
+        # tables = connection.introspection.table_name()
+        # seen_models = connection.introspection.installed_models(tables)
+        
+        context['tables'] = []
+        tables = ['project','sponsorcompony','people','email','reasearchlines','metadata','files','videos','articles']      
+        for table in tables:
+            context['tables'].append({'nome':'%s' % table, 'link_view':'', 'link_create':'tables/%s/create' % table,
+                                      'link_update':'tables/%s/update' % table, 'link_delete':'tables/%s/delete' % table})
+
+        return context 
+    
+# Tables/view
+
+# Tables/create
+class TablesCreateView(CreateView):
+    template_name = 'tables_create.html'
+    model = Metadata
+    form_class = MetadataModelForm
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['link_admin'] = '/admin'
         context['link_tables'] = '/tables'
         return context 
     
     
+
     

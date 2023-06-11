@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser
+from .models import CustomUser, Metadata
 
 
 # Create the forms
@@ -18,4 +18,8 @@ class CustomUserChangeForm(UserChangeForm):
         model = CustomUser
         fields = ("email",)
 
+class MetadataModelForm(forms.ModelForm):
+    class Meta:
+        model = Metadata
+        fields = ['title', 'reasearchline', 'contributor', 'contact', 'description', 'keyword', 'notes']
 
