@@ -4,7 +4,9 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin 
 from django.contrib.auth.decorators import permission_required
+from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
+from django.http import HttpRequest, HttpResponse
 from django.views.generic import TemplateView, CreateView, UpdateView, DetailView, ListView
 from django.db import connection, models
 from django.urls import reverse, reverse_lazy
@@ -179,15 +181,63 @@ class TablesCreateView(CreateView):
 # Table/update
 class TableListView(ListView):
     '''
-        Show all instances in table
+        First show all instances in table.
+        Link the path to TableUpdateView
     '''
     template_name = 'tables_view.html'
     
+    def get(self, request, *args, **kwargs):
+        self.object = None
+        self.table = kwargs['table']
+        return super().get(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        MODELS = {
+            "project": Project,
+            "sponsor_compony": SponsorCompany,
+            "people": People,
+            "email": Email,
+            "reasearch_lines": ReasearchLines,
+            "metadata": Metadata,
+            "files": Files,
+            "videos": Videos,
+            "articles": Articles,
+        }
+        self.model = MODELS[self.table]
+        return super().get_queryset()
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['link_home'] = '/'
+        context['tables'] = '/tables'
+        context['table'] = self.table
+        context['instances'] = self.model.objects.all()
         return context
-    pass
 
 class TableUpdateView(UpdateView):
-    pass
+    '''
+        Get the id of the instance and update in model
+    '''
+    template_name = 'tables_update.html'
     
+    def get(self, request, *args, **kwargs):
+        self.object = None
+        self.table = kwargs['table']
+        self.id = kwargs['pk']
+        print(self.table, self.id)
+        return super().get(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        MODELS = {
+            "project": Project,
+            "sponsor_compony": SponsorCompany,
+            "people": People,
+            "email": Email,
+            "reasearch_lines": ReasearchLines,
+            "metadata": Metadata,
+            "files": Files,
+            "videos": Videos,
+            "articles": Articles,
+        }
+        self.model = MODELS[self.table]
+        return super().get_queryset()

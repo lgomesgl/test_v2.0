@@ -58,7 +58,7 @@
                               <a class="nav-link" href="{{ link_home }}">Home</a>
                            </li>
                            <li class="nav-item">
-                              <a class="nav-link" href="{{ link_tabelas }}">Tabelas</a>
+                              <a class="nav-link" href="{{ link_tables }}">Tables</a>
                            </li>
                            {% comment %} <li class="nav-item active">
                               <a class="nav-link" href="hosting.html">Hosting</a>
@@ -93,36 +93,17 @@
             <div class="row">
                <div class="col-md-8 offset-md-2">
                   <div class="titlepage text_align_center">
-                     <h2>Banco de usuários<br> <span class="blue_light"></span></h2>
+                     <h2>{{ table }}<br> <span class="blue_light"></span></h2>
                      {% comment %} <p>Seleciona um para poder adicionar/mofidificar/deletar uma instância delas.
                      </p> {% endcomment %}
                      <table class='table'>
                         <tr>
-                            <th>Nome</th>
-                            <th>Email</th>
-                            {% comment %} <th>staff</th> {% endcomment %}
-                            <th>Administrador</th>
-                            {% comment %} <th>Grupos</th> {% endcomment %}
-                            {% comment %} <th>Ultimo login</th> {% endcomment %}
+                            <th>Name</th>
                         </tr>
-                        {% for users in usuarios %}
-                        {% if users.is_active %}
+                        {% for instance in instances %}
                         <tr>  
-                            <td><a href="{{ link_home }}">{{ users.first_name }} {{ users.last_name }}</a></td>
-                            <td>{{ users.email }}</td>
-                            {% comment %} {% if users.is_staff %}
-                            <td>Sim</td>
-                            {% else %}
-                            <td>Não</td>
-                            {% endif %} {% endcomment %}
-                            {% if users.is_superuser %}
-                            <td>Sim</td>
-                            {% else %}
-                            <td>Não</td>
-                            {% endif %}
-                            {% comment %} <td>{{ users.last_login }}</td> {% endcomment %}
+                            <td><a href="update/{{ instance.id }}">{{ instance }}</a></td>
                         </tr>
-                        {% endif %}
                         {% endfor %}
                     </table>
                   </div>
