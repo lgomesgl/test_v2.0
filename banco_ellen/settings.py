@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'stdimage',
     'django_forms_bootstrap',
     'crispy_forms',
+    'multiplefilefield',
 ]
 
 MIDDLEWARE = [

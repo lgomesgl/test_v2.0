@@ -9,7 +9,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Tabelas</title>
+      <title>Users</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -42,7 +42,7 @@
                   <div class="full">
                      <div class="center-desk">
                         <div class="logo">
-                           <a href="index.html"><img src="{% static 'images/logo_alfa.png' %}" alt="#" /></a>
+                           <a href="{{ index }}"><img src="{% static 'images/logo_alfa.png' %}" alt="#" /></a>
                         </div>
                      </div>
                   </div>
@@ -58,7 +58,7 @@
                               <a class="nav-link" href="{{ link_home }}">Home</a>
                            </li>
                            <li class="nav-item">
-                              <a class="nav-link" href="{{ link_about }}">About</a>
+                              <a class="nav-link" href="{{ link_tabelas }}">Tabelas</a>
                            </li>
                            {% comment %} <li class="nav-item active">
                               <a class="nav-link" href="hosting.html">Hosting</a>
@@ -66,10 +66,9 @@
                            <li class="nav-item">
                               <a class="nav-link" href="domain.html">Domain</a>
                            </li>
-                          
                            <li class="nav-item">
                               <a class="nav-link" href="contact.html">Contact Us</a>
-                           </li>  {% endcomment %}
+                           </li> {% endcomment %}
                         </ul>
                      </div>
                   </nav>
@@ -94,34 +93,40 @@
             <div class="row">
                <div class="col-md-8 offset-md-2">
                   <div class="titlepage text_align_center">
-                     <h2>Tables<br><span class="blue_light"></span></h2>
-                     <p>Add/Modify/Delete
+                     <h2>Banco de usuários<br> <span class="blue_light"></span></h2>
+                     {% comment %} <p>Seleciona um para poder adicionar/mofidificar/deletar uma instância delas.
+                     </p> {% endcomment %}
+                     <table class='table'>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            {% comment %} <th>staff</th> {% endcomment %}
+                            <th>Administrador</th>
+                            {% comment %} <th>Grupos</th> {% endcomment %}
+                            {% comment %} <th>Ultimo login</th> {% endcomment %}
+                        </tr>
+                        {% for users in usuarios %}
+                        {% if users.is_active %}
+                        <tr>  
+                            <td><a href="{{ link_home }}">{{ users.first_name }} {{ users.last_name }}</a></td>
+                            <td>{{ users.email }}</td>
+                            {% comment %} {% if users.is_staff %}
+                            <td>Sim</td>
+                            {% else %}
+                            <td>Não</td>
+                            {% endif %} {% endcomment %}
+                            {% if users.is_superuser %}
+                            <td>Sim</td>
+                            {% else %}
+                            <td>Não</td>
+                            {% endif %}
+                            {% comment %} <td>{{ users.last_login }}</td> {% endcomment %}
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </table>
                   </div>
                </div>
-            </div>
-            <div class="row">
-               {% for table in tables %}
-               {% comment %} {% if table in {# all tables the user has permission #} %} {% endcomment %}
-               <div class="col-md-4">
-                  <div id="ho_co" class="order-box_main">
-                     <div class="order-box text_align_center">
-                        {% comment %} <h3><a href="{{ link_projetos_form }}">Projetos</a></h3> {% endcomment %}
-                        <h3>{{ table.nome }}</h3>
-                        {% comment %} <p>STARTING  <span>$9</span> PER MONTH</p> {% endcomment %}
-                        {% comment %} <a href="{{ link_projetos_form }}">Personal use</a> {% endcomment %}
-                        <ul class="supp">
-                           <li><a href="{{ table.link_create }}">Add</a></li> <!-- How to fiz that?? forloop.counter0 ?-->
-                           <li><a href="{{ table.link_update }}">Modify</a></li>
-                           <li><a href="{{ table.link_delete }}">Delete</a></li>
-                           {% comment %} <li>Unlimited projects</li>
-                           <li>24/7 support</li> {% endcomment %}
-                        </ul>
-                     </div>
-                     {% comment %} <a class="read_more" href="Javascript:void(0)">Buy Now</a> {% endcomment %}
-                  </div>
-               </div>
-               {% comment %} {% endif %} {% endcomment %}
-               {% endfor %}
             </div>
          </div>
       </div>

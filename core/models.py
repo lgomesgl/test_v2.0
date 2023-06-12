@@ -2,6 +2,7 @@ from django.db import models
 # from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.contrib.auth.models import Group
+# from multiplefilefield.fields import MultipleFileModelField
 
 # Create your models here
 class Base(models.Model):

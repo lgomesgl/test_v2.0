@@ -1,5 +1,5 @@
 from django.urls import path 
-from .views import HomePageTemplateView, CreateUserCreateView, CreateUserUpdateView, AboutTemplateView, TablesTemplateView, TablesCreateView
+from .views import HomePageTemplateView, CreateUserCreateView, CreateUserUpdateView, AboutTemplateView, TablesTemplateView, TablesCreateView, TableListView
 
 from .models import Metadata
 from .forms import MetadataModelForm
@@ -11,5 +11,6 @@ urlpatterns = [
     path('about', AboutTemplateView.as_view(), name='about'),
     path('tables', TablesTemplateView.as_view(), name='tables'),
     # path('tables/<str:table>/view', TablesListView.asview(), name='tables/<table>/view'),
-    path('tables/<str:table>/add', TablesCreateView.as_view(), name='tables/<table>/add'),
+    path('tables/<str:table>/add', TablesCreateView.as_view(), name='tables-add'),
+    path('tables/<str:table>/view', TableListView.as_view(), name='tables-view'),
 ]

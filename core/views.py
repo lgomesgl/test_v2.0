@@ -5,9 +5,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin 
 from django.contrib.auth.decorators import permission_required
 from django.forms.models import BaseModelForm
-from django.views.generic import TemplateView, CreateView, UpdateView, DetailView
+from django.views.generic import TemplateView, CreateView, UpdateView, DetailView, ListView
 from django.db import connection, models
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
+from django.shortcuts import redirect
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm, ProjectModelForm, SponsorComponyModelForm, PeopleModelForm, EmailModelForm, ReasearchLinesModelForm, MetadataModelForm, FilesModelForm, VideosModelForm, ArticlesModelForm
 from .models import CustomUser, Project, SponsorCompany, People, Email, ReasearchLines, Metadata, Files, Videos, Articles
@@ -81,7 +82,7 @@ class AboutTemplateView(TemplateView):
     
 ## Tables
 '''
-    Show the tables and link with create/update/delete instances
+    Show the tables and link with create/update/delete instances for each tables
 '''
 class TablesTemplateView(TemplateView):
     '''
@@ -109,19 +110,11 @@ class TablesTemplateView(TemplateView):
 # Tables/view
 
 # Tables/create
+'''
+    One view which works for all create forms.
+'''
 class TablesCreateView(CreateView):
-    '''
-        get_sucess_url not working.
-        It's necessary to give the model(def get_querset)
-    '''
     template_name = 'tables_create.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['link_admin'] = '/admin'
-        context['link_tables'] = '/tables'   
-        context['table'] = self.table     
-        return context 
     
     def get(self, request, *args, **kwargs):
         '''
@@ -131,11 +124,11 @@ class TablesCreateView(CreateView):
         self.table = kwargs['table']
         return super().get(request, *args, **kwargs)
     
-    def post(self, request, *args, **kwargs):
-        self.object = None
-        self.table = kwargs['table']
-        return super().post(request, *args, **kwargs)
-    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        context['table'] = self.table     
+        return context 
+      
     def get_form_class(self):
         FORMS = {
             "project": ProjectModelForm,
@@ -150,7 +143,27 @@ class TablesCreateView(CreateView):
         }
         self.form_class = FORMS[self.table]
         return super().get_form_class()
+    
+    def get_queryset(self):
+        MODELS = {
+            "project": Project,
+            "sponsor_compony": SponsorCompany,
+            "people": People,
+            "email": Email,
+            "reasearch_lines": ReasearchLines,
+            "metadata": Metadata,
+            "files": Files,
+            "videos": Videos,
+            "articles": Articles,
+        }
+        self.model = MODELS[self.table]
+        return super().get_queryset()
      
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        self.table = kwargs['table']        
+        return super().post(request, *args, **kwargs)
+    
     def form_valid(self, form):
         messages.success(self.request, 'New registered user')
         return super(TablesCreateView, self).form_valid(form)
@@ -160,9 +173,21 @@ class TablesCreateView(CreateView):
         return super(TablesCreateView, self).form_invalid(form)
     
     def get_success_url(self):
-        self.success_url = reverse_lazy('tables/%s/add' % self.table)
+        self.success_url = self.request.path
         return super().get_success_url()
     
+# Table/update
+class TableListView(ListView):
+    '''
+        Show all instances in table
+    '''
+    template_name = 'tables_view.html'
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    pass
 
+class TableUpdateView(UpdateView):
+    pass
     
