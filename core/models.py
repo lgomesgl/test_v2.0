@@ -16,7 +16,7 @@ class Base(models.Model):
         
 class Project(Base):
     name = models.CharField(max_length=100, unique=True)
-    over_date = models.DateField(name='Over date', null=True, blank=True)
+    over_date = models.DateField(null=True, blank=True)
     
     def __str__(self):
         return self.name
@@ -54,9 +54,9 @@ class People(Base):
     ]
     
     name = models.CharField(max_length=100)
-    sex = models.CharField(name='Sex', max_length=1, choices=SEX)
-    post = models.CharField(name='Post', max_length=50, choices=POST)
-    projeto = models.ManyToManyField(Project)
+    sex = models.CharField(max_length=1, choices=SEX)
+    post = models.CharField(max_length=50, choices=POST)
+    project = models.ManyToManyField(Project)
     
     def __str__(self):
         return self.name

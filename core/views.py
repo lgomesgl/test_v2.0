@@ -1,4 +1,5 @@
 from typing import Any, Dict, Type
+from django import http
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin 
@@ -8,8 +9,8 @@ from django.views.generic import TemplateView, CreateView, UpdateView, DetailVie
 from django.db import connection, models
 from django.urls import reverse_lazy
 
-from .forms import CustomUserCreationForm, CustomUserChangeForm, MetadataModelForm
-from .models import CustomUser, Metadata
+from .forms import CustomUserCreationForm, CustomUserChangeForm, ProjectModelForm, SponsorComponyModelForm, PeopleModelForm, EmailModelForm, ReasearchLinesModelForm, MetadataModelForm, FilesModelForm, VideosModelForm, ArticlesModelForm
+from .models import CustomUser, Project, SponsorCompany, People, Email, ReasearchLines, Metadata, Files, Videos, Articles
 
 # Create your views here.
 
@@ -83,11 +84,14 @@ class AboutTemplateView(TemplateView):
     Show the tables and link with create/update/delete instances
 '''
 class TablesTemplateView(TemplateView):
+    '''
+        Permissions
+    '''
     template_name = 'tables.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['link_home'] = ''
+        context['link_home'] = 'http://127.0.0.1:8000/'
         context['link_about'] = '/about'
         context['link_admin'] = '/admin'
         
@@ -95,26 +99,69 @@ class TablesTemplateView(TemplateView):
         # seen_models = connection.introspection.installed_models(tables)
         
         context['tables'] = []
-        tables = ['project','sponsorcompony','people','email','reasearchlines','metadata','files','videos','articles']      
+        tables = ['project','sponsor_compony','people','email','reasearch_lines','metadata','files','videos','articles']      
         for table in tables:
-            context['tables'].append({'nome':'%s' % table, 'link_view':'', 'link_create':'tables/%s/create' % table,
+            context['tables'].append({'nome':'%s' % table, 'link_view':'', 'link_create':'tables/%s/add' % table,
                                       'link_update':'tables/%s/update' % table, 'link_delete':'tables/%s/delete' % table})
 
         return context 
-    
+  
 # Tables/view
 
 # Tables/create
 class TablesCreateView(CreateView):
+    '''
+        get_sucess_url not working.
+        It's necessary to give the model(def get_querset)
+    '''
     template_name = 'tables_create.html'
-    model = Metadata
-    form_class = MetadataModelForm
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['link_admin'] = '/admin'
-        context['link_tables'] = '/tables'
+        context['link_tables'] = '/tables'   
+        context['table'] = self.table     
         return context 
+    
+    def get(self, request, *args, **kwargs):
+        '''
+            Get from URL the table 
+        '''
+        self.object = None
+        self.table = kwargs['table']
+        return super().get(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        self.table = kwargs['table']
+        return super().post(request, *args, **kwargs)
+    
+    def get_form_class(self):
+        FORMS = {
+            "project": ProjectModelForm,
+            "sponsor_compony": SponsorComponyModelForm,
+            "people": PeopleModelForm,
+            "email": EmailModelForm,
+            "reasearch_lines": ReasearchLinesModelForm,
+            "metadata": MetadataModelForm,
+            "files": FilesModelForm,
+            "videos": VideosModelForm,
+            "articles": ArticlesModelForm,
+        }
+        self.form_class = FORMS[self.table]
+        return super().get_form_class()
+     
+    def form_valid(self, form):
+        messages.success(self.request, 'New registered user')
+        return super(TablesCreateView, self).form_valid(form)
+    
+    def form_invalid(self, form): 
+        messages.error(self.request, 'Erro - Fill in the mandatory data!') 
+        return super(TablesCreateView, self).form_invalid(form)
+    
+    def get_success_url(self):
+        self.success_url = reverse_lazy('tables/%s/add' % self.table)
+        return super().get_success_url()
     
     
 
