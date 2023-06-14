@@ -44,7 +44,7 @@ class SponsorComponyModelForm(forms.ModelForm):
 class PeopleModelForm(forms.ModelForm):
     class Meta:
         model = People
-        fields = ['name','sex','post','project']
+        fields = ['name','sex','position','project']
         
 class EmailModelForm(forms.ModelForm):
     class Meta:

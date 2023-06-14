@@ -224,7 +224,6 @@ class TableUpdateView(UpdateView):
         self.object = None
         self.table = kwargs['table']
         self.id = kwargs['pk']
-        print(self.table, self.id)
         return super().get(request, *args, **kwargs)
     
     def get_queryset(self):

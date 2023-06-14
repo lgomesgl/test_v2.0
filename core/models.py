@@ -44,7 +44,7 @@ class People(Base):
         ('F','Feminino'),    
     ]
     
-    POST = [
+    POSITIONS = [
         ('Professor Doutor','Professor Doutor'),
         ('Professor Adjunto','Professor Adjunto'),
         ('Pesquisador','Pesquisador'),
@@ -56,7 +56,7 @@ class People(Base):
     
     name = models.CharField(max_length=100)
     sex = models.CharField(max_length=1, choices=SEX)
-    post = models.CharField(max_length=50, choices=POST)
+    position = models.CharField(max_length=50, choices=POSITIONS)
     project = models.ManyToManyField(Project)
     
     def __str__(self):

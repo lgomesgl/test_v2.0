@@ -33,8 +33,8 @@ class EnterpriseAdmin(admin.ModelAdmin):
     
 @admin.register(People)
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ['name','post']
-    list_filter = ['post']
+    list_display = ['name','position']
+    list_filter = ['position']
     search_fields = ['name']
 
 @admin.register(Email)

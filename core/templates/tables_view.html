@@ -9,7 +9,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Users</title>
+      <title>{{ table }} - List</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -101,9 +101,15 @@
                             <th>Name</th>
                         </tr>
                         {% for instance in instances %}
+                        {% if table == 'files' %}
+                        <tr>  
+                           <td><a href="update/{{ instance.id }}">{{ instance.file }}</a></td>
+                        </tr>  
+                        {% else %}                      
                         <tr>  
                             <td><a href="update/{{ instance.id }}">{{ instance }}</a></td>
                         </tr>
+                        {% endif %}
                         {% endfor %}
                     </table>
                   </div>
