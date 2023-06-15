@@ -101,14 +101,19 @@
                             <th>Name</th>
                         </tr>
                         {% for instance in instances %}
-                        {% if table == 'files' %}
+                        {% comment %} {% if table == 'files' %}
                         <tr>  
                            <td><a href="update/{{ instance.id }}">{{ instance.file }}</a></td>
                         </tr>  
-                        {% else %}                      
-                        <tr>  
-                            <td><a href="update/{{ instance.id }}">{{ instance }}</a></td>
-                        </tr>
+                        {% else %}                       {% endcomment %}
+                        {% if action == 'update' %}
+                           <tr>  
+                              <td><a href="update/{{ instance.id }}">{{ instance }}</a></td>
+                           </tr>
+                        {% else %}
+                           <tr>  
+                              <td><a href="delete/{{ instance.id }}">{{ instance }}</a></td>
+                           </tr>
                         {% endif %}
                         {% endfor %}
                     </table>

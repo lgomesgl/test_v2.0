@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import permission_required
 from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
 from django.http import HttpRequest, HttpResponse
-from django.views.generic import TemplateView, CreateView, UpdateView, DetailView, ListView
+from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, ListView
 from django.db import connection, models
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
@@ -34,7 +34,7 @@ class HomePageTemplateView(TemplateView):
         context['link_usuarios'] = '/users'
         return context 
     
-# Create User
+# -------------------------------------------------- Create User --------------------------------------------------------------------------------------
 '''
     CreateView
     Introducing a form with Email, first name, last name, group, password and password confirmation
@@ -68,7 +68,7 @@ class CreateUserUpdateView(UpdateView):
         messages.success(self.request, 'New registered user')
         return super(CreateUserCreateView, self).form_valid(form)
     
-# About
+# -------------------------------------------------- About ----------------------------------------------------------------------------------------------
 '''
     Just talk about the database and a button to show the correlations of the tables
 '''
@@ -82,7 +82,7 @@ class AboutTemplateView(TemplateView):
         context['link_tables'] = '/tables'
         return context 
     
-## Tables
+# ------------------------------------------------- Tables --------------------------------------------------------------------------------------------
 '''
     Show the tables and link with create/update/delete instances for each tables
 '''
@@ -171,7 +171,7 @@ class TablesCreateView(CreateView):
         return super(TablesCreateView, self).form_valid(form)
     
     def form_invalid(self, form): 
-        messages.error(self.request, 'Erro - Fill in the mandatory data!') 
+        messages.error(self.request, 'Erro to register') 
         return super(TablesCreateView, self).form_invalid(form)
     
     def get_success_url(self):
@@ -185,6 +185,43 @@ class TableListView(ListView):
         Link the path to TableUpdateView
     '''
     template_name = 'tables_view.html'
+    
+    def get(self, request, *args, **kwargs):
+        self.object = None
+        self.table = kwargs['table']
+        self.action = kwargs['action']
+        return super().get(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        MODELS = {
+            "project": Project,
+            "sponsor_compony": SponsorCompany,
+            "people": People,
+            "email": Email,
+            "reasearch_lines": ReasearchLines,
+            "metadata": Metadata,
+            "files": Files,
+            "videos": Videos,
+            "articles": Articles,
+        }
+        self.model = MODELS[self.table]
+        return super().get_queryset()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['link_home'] = '/'
+        context['tables'] = '/tables'
+        context['table'] = self.table
+        context['action'] = self.action
+        context['instances'] = self.model.objects.all()
+        return context
+
+class TableUpdateView(UpdateView):
+    '''
+        Get the id of the instance and update in model
+    '''
+    template_name = 'tables_update.html'
+    fields = "__all__"
     
     def get(self, request, *args, **kwargs):
         self.object = None
@@ -208,35 +245,24 @@ class TableListView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['link_home'] = '/'
-        context['tables'] = '/tables'
         context['table'] = self.table
-        context['instances'] = self.model.objects.all()
         return context
-
-class TableUpdateView(UpdateView):
-    '''
-        Get the id of the instance and update in model
-    '''
-    template_name = 'tables_update.html'
     
-    def get(self, request, *args, **kwargs):
-        self.object = None
+    def post(self, request, *args, **kwargs):
         self.table = kwargs['table']
-        self.id = kwargs['pk']
-        return super().get(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Update completed')
+        return super(TableUpdateView, self).form_valid(form)
     
-    def get_queryset(self):
-        MODELS = {
-            "project": Project,
-            "sponsor_compony": SponsorCompany,
-            "people": People,
-            "email": Email,
-            "reasearch_lines": ReasearchLines,
-            "metadata": Metadata,
-            "files": Files,
-            "videos": Videos,
-            "articles": Articles,
-        }
-        self.model = MODELS[self.table]
-        return super().get_queryset()
+    def form_invalid(self, form):
+        messages.error(self.request, 'Erro to update')
+        return super().form_invalid(form)
+    
+    def get_success_url(self):
+        self.success_url = self.request.path
+        return super().get_success_url()
+    
+class TableDeleteView(DeleteView):
+    pass
