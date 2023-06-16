@@ -265,4 +265,48 @@ class TableUpdateView(UpdateView):
         return super().get_success_url()
     
 class TableDeleteView(DeleteView):
+    '''
+        Delete the instance of table
+    '''
+    template_name = 'tables_delete.html'
+    
+    def get(self, request, *args, **kwargs):
+        self.object = None
+        self.table = kwargs['table']
+        return super().get(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        MODELS = {
+        "project": Project,
+        "sponsor_compony": SponsorCompany,
+        "people": People,
+        "email": Email,
+        "reasearch_lines": ReasearchLines,
+        "metadata": Metadata,
+        "files": Files,
+        "videos": Videos,
+        "articles": Articles,
+    }
+        self.model = MODELS[self.table]
+        return super().get_queryset()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['name'] = self.model.objects.all().get(id=self.kwargs.get(self.pk_url_kwarg))
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        self.table = kwargs['table']
+        return super().post(request, *args, **kwargs)
+    
+    def get_success_url(self, **kwargs):
+        self.success_url = reverse_lazy('tables-list', kwargs = {'table': self.table, 'action': 'delete'})
+        return super().get_success_url()
+    
+# ---------------------------------- users ----------------------------------------------------
+'''
+    ListView or DetailView??
+'''
+class UsersListView(ListView):
     pass

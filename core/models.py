@@ -45,13 +45,15 @@ class People(Base):
     ]
     
     POSITIONS = [
-        ('Professor Doutor','Professor Doutor'),
-        ('Professor Adjunto','Professor Adjunto'),
-        ('Pesquisador','Pesquisador'),
-        ('Pós-Doc','Pós-Doc'),
-        ('Doutorando','Doutorando'),
-        ('Mestrando','Mestrando'),
-        ('Iniciação científica','Iniciação científica'),
+        ('Professors','Professors'),
+        ('Collaborating Professors','Collaborating Professors'),
+        ('Researchers','Researchers'),
+        ('Postdocs','Postdocs'),
+        ('Ph.D students','Ph.D students'),
+        ('Master Students','Master Students'),
+        ('Graduation Students','Graduation Students'),
+        ('Tech staff','Tech staff'),
+        ('Project Manager','Project Manager'),
     ]
     
     name = models.CharField(max_length=100)

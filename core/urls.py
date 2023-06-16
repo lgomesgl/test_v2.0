@@ -13,4 +13,5 @@ urlpatterns = [
     path('tables/<str:table>/<str:action>', TableListView.as_view(), name='tables-list'), # action -> can be update or delete
     path('tables/<str:table>/update/<int:pk>', TableUpdateView.as_view(), name='tables-update'),
     path('tables/<str:table>/delete/<int:pk>', TableDeleteView.as_view(), name='tables-delete'),
+    # path('users', )
 ]
