@@ -1,4 +1,5 @@
 {% load static %}
+{% load bootstrap4 %}
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -42,7 +43,7 @@
                   <div class="full">
                      <div class="center-desk">
                         <div class="logo">
-                           <a href="index.html"><img src="{% static 'images/logo_alfa' %}.png" alt="#" /></a>
+                           <a href="{{ link_home }}"><img src="{% static 'images/logo_alfa' %}.png" alt="#" /></a>
                         </div>
                      </div>
                   </div>
@@ -102,11 +103,31 @@
                      {% comment %} <figure><img src="{% static 'images/about.png' %}" alt="#"/></figure> {% endcomment %}
                      <p>
                         O banco de dados foi criado para facilitar a manipulação de dados gerados nos experimentos do grupo ALFA e facilitar a comunicação entre as empresas patrocinadoras e seus protejos. Cada usuário do banco terá suas devidas permissões para manipular os dados presentes nele.
-
                      </p>
                      {% comment %} <a class="read_more" href="">Read More</a> <!-- Aqui irá redirecionar para uma modelagem do banco de dados --> {% endcomment %}
-                     <button type="button"></button>
-                     <img src="{% static 'images/modelagem_banco.png' %}" height ="90" width="480"/>
+                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                        Database Model
+                     </button>
+                     <!-- Modal -->
+                     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <h5 class="modal-title" id="exampleModalLongTitle">Database Model</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                 </button>
+                              </div>
+                              <div class="modal-body">
+                                 <img src="{% static 'images/modelagem_banco.png' %}" height ="90" width="480"/>
+                              </div>
+                              <div class="modal-footer">
+                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- End Modal -->
                   </div>
                </div>
             </div>

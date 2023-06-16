@@ -8,17 +8,16 @@
 </head>
 <body>
     <div class="container">
-        <h1>Delete the instance {{ name }}</h1>
+        <h1>Delete {{ name }}</h1>
         {% bootstrap_messages %}
 
         <form action="" method="post" class="form" autocomplete="off">
             {% csrf_token %}
             {% bootstrap_form form %}
-            <p> Are you sure you want to delete: {{ name }}</p>
+            <p> Are you sure you want to delete {{ name }} from {{ table }} ?</p>
             {% buttons %}
                 <button type="submit" class="btn btn-primary">Delete</button>
             {% endbuttons %}
-
         </form>
     </div>
 

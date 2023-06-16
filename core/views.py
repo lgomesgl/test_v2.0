@@ -78,7 +78,7 @@ class AboutTemplateView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['link_admin'] = '/admin'
-        context['link_home'] = ''
+        context['link_home'] = 'http://127.0.0.1:8000/'
         context['link_tables'] = '/tables'
         return context 
     
@@ -292,6 +292,7 @@ class TableDeleteView(DeleteView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['table'] = self.table
         context['name'] = self.model.objects.all().get(id=self.kwargs.get(self.pk_url_kwarg))
         return context
     
