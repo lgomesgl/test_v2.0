@@ -80,7 +80,7 @@ class MultipleFileField(forms.FileField):
 class FilesModelForm(forms.ModelForm):
     class Meta:
         model = Files
-        fields = ['metadata','name','type','file','person']
+        fields = ['metadata', 'person', 'name','type','file']
         
         file = MultipleFileInput()
         

@@ -58,11 +58,12 @@
                               <a class="nav-link" href="{{ link_home }}">Home</a>
                            </li>
                            <li class="nav-item">
-                              <a class="nav-link" href="{{ link_tables }}">Tables</a>
+                              <a class="nav-link" href="{{ link_about }}">About</a>
                            </li>
-                           {% comment %} <li class="nav-item active">
-                              <a class="nav-link" href="hosting.html">Hosting</a>
+                           <li class="nav-item">
+                              <a class="nav-link" href="{{ link_tables }}">Database</a>
                            </li>
+                           {% comment %} 
                            <li class="nav-item">
                               <a class="nav-link" href="domain.html">Domain</a>
                            </li>
@@ -99,6 +100,8 @@
                      <table class='table'>
                         <tr>
                             <th>Name</th>
+                            <th>Create Date</th>
+                            <th>Modify Date</th>
                         </tr>
                         {% for instance in instances %}
                         {% comment %} {% if table == 'files' %}
@@ -109,10 +112,14 @@
                         {% if action == 'update' %}
                            <tr>  
                               <td><a href="update/{{ instance.id }}">{{ instance }}</a></td>
+                              <td>{{ instance.Creates_date }}</td>
+                              <td>{{ instance.Modify_date }}</td>
                            </tr>
                         {% else %}
                            <tr>  
                               <td><a href="delete/{{ instance.id }}">{{ instance }}</a></td>
+                              <td>{{ instance.Creates_date }}</td>
+                              <td>{{ instance.Modify_date }}</td>
                            </tr>
                         {% endif %}
                         {% endfor %}

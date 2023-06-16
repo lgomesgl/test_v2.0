@@ -1,6 +1,7 @@
 {% load static %}
+{% load bootstrap4 %}
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
    <head>
       <!-- basic -->
       <meta charset="utf-8">
@@ -9,7 +10,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Users</title>
+      <title>Users - DBA</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -58,7 +59,7 @@
                               <a class="nav-link" href="{{ link_home }}">Home</a>
                            </li>
                            <li class="nav-item">
-                              <a class="nav-link" href="{{ link_tabelas }}">Tabelas</a>
+                              <a class="nav-link" href="{{ link_tabelas }}">Database</a>
                            </li>
                            {% comment %} <li class="nav-item active">
                               <a class="nav-link" href="hosting.html">Hosting</a>
@@ -93,15 +94,15 @@
             <div class="row">
                <div class="col-md-8 offset-md-2">
                   <div class="titlepage text_align_center">
-                     <h2>Banco de usuários<br> <span class="blue_light"></span></h2>
+                     <h2>Users<br> <span class="blue_light"></span></h2>
                      {% comment %} <p>Seleciona um para poder adicionar/mofidificar/deletar uma instância delas.
                      </p> {% endcomment %}
                      <table class='table'>
                         <tr>
-                            <th>Nome</th>
+                            <th>Name</th>
                             <th>Email</th>
                             {% comment %} <th>staff</th> {% endcomment %}
-                            <th>Administrador</th>
+                            <th>Group view</th>
                             {% comment %} <th>Grupos</th> {% endcomment %}
                             {% comment %} <th>Ultimo login</th> {% endcomment %}
                         </tr>
@@ -110,15 +111,10 @@
                         <tr>  
                             <td><a href="{{ link_home }}">{{ users.first_name }} {{ users.last_name }}</a></td>
                             <td>{{ users.email }}</td>
-                            {% comment %} {% if users.is_staff %}
-                            <td>Sim</td>
-                            {% else %}
-                            <td>Não</td>
-                            {% endif %} {% endcomment %}
                             {% if users.is_superuser %}
-                            <td>Sim</td>
+                            <td>Admin</td>
                             {% else %}
-                            <td>Não</td>
+                            <td>{{ users.group}}</td>
                             {% endif %}
                             {% comment %} <td>{{ users.last_login }}</td> {% endcomment %}
                         </tr>

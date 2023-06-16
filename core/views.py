@@ -23,14 +23,14 @@ from .models import CustomUser, Project, SponsorCompany, People, Email, Reasearc
     Just show a html
 '''
 class HomePageTemplateView(TemplateView):
-    template_name = 'index.html'
+    template_name = 'home_page.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['link_admin'] = '/admin'
         context['link_create_user'] = '/create_user'
         context['link_about'] = '/about'
-        context['link_tabelas'] = '/tables'
+        context['link_tabelas'] = '/database'
         context['link_usuarios'] = '/users'
         return context 
     
@@ -79,7 +79,8 @@ class AboutTemplateView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['link_admin'] = '/admin'
         context['link_home'] = 'http://127.0.0.1:8000/'
-        context['link_tables'] = '/tables'
+        context['link_tables'] = '/database'
+        context['link_users'] = '/users'
         return context 
     
 # ------------------------------------------------- Tables --------------------------------------------------------------------------------------------
@@ -104,8 +105,8 @@ class TablesTemplateView(TemplateView):
         context['tables'] = []
         tables = ['project','sponsor_compony','people','email','reasearch_lines','metadata','files','videos','articles']      
         for table in tables:
-            context['tables'].append({'nome':'%s' % table, 'link_view':'', 'link_create':'tables/%s/add' % table,
-                                      'link_update':'tables/%s/update' % table, 'link_delete':'tables/%s/delete' % table})
+            context['tables'].append({'nome':'%s' % table, 'link_view':'', 'link_create':'%s/add' % table,
+                                      'link_update':'%s/update' % table, 'link_delete':'%s/delete' % table})
 
         return context 
   
@@ -210,7 +211,8 @@ class TableListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['link_home'] = '/'
-        context['tables'] = '/tables'
+        context['link_about'] = '/about'
+        context['link_tables'] = '/database'
         context['table'] = self.table
         context['action'] = self.action
         context['instances'] = self.model.objects.all()
@@ -296,6 +298,10 @@ class TableDeleteView(DeleteView):
         context['name'] = self.model.objects.all().get(id=self.kwargs.get(self.pk_url_kwarg))
         return context
     
+    # def form_valid(self, form):
+    #     messages.success(self.request, '%s deleted' % (self.model.objects.all().get(id=self.kwargs.get(self.pk_url_kwarg))))
+    #     return super(TableDeleteView, self).form_valid(form)   
+    
     def post(self, request, *args, **kwargs):
         self.object = None
         self.table = kwargs['table']
@@ -307,7 +313,21 @@ class TableDeleteView(DeleteView):
     
 # ---------------------------------- users ----------------------------------------------------
 '''
-    ListView or DetailView??
+    ListView  -> List all users 
 '''
 class UsersListView(ListView):
-    pass
+    template_name = 'users.html'
+    
+    def get_queryset(self):
+        self.model = CustomUser
+        return super().get_queryset()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['index'] = 'home'
+        context['link_admin'] = '/admin'
+        context['link_tabelas'] = '/database'
+        context['usuarios'] = self.model.objects.all()
+        return context
+    
+    

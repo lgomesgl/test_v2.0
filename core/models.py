@@ -9,8 +9,8 @@ class Base(models.Model):
     '''
     Table with some ordinary columns that we wanted in some tables. 
     '''
-    creates_date = models.DateField(name='Creates date', auto_now_add=True)
-    modify_date = models.DateField(name='Modify date', auto_now=True)
+    creates_date = models.DateField(name='Creates_date', auto_now_add=True)
+    modify_date = models.DateField(name='Modify_date', auto_now=True)
     
     class Meta:
         abstract = True
