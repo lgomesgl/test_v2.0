@@ -17,7 +17,7 @@ from .models import CustomUser, Project, SponsorCompany, People, Email, Reasearc
 
 # Create your views here.
 
-# Home page
+# --------------------------------------------------- Home page ---------------------------------------------------------------
 '''
     TemplateView
     Just show a html
@@ -32,6 +32,11 @@ class HomePageTemplateView(TemplateView):
         context['link_about'] = '/about'
         context['link_tabelas'] = '/database'
         context['link_usuarios'] = '/users'
+        
+        context['databases'] = []
+        tables = ['project','sponsor_compony','people','email','reasearch_lines','metadata','files','videos','articles']      
+        for table in tables:
+            context['databases'].append({'nome':'%s' % table, 'link_detail':'database/%s/detail' % table})
         return context 
     
 # -------------------------------------------------- Create User --------------------------------------------------------------------------------------
@@ -185,7 +190,7 @@ class TableListView(ListView):
         First show all instances in table.
         Link the path to TableUpdateView
     '''
-    template_name = 'tables_view.html'
+    template_name = 'tables_list.html'
     
     def get(self, request, *args, **kwargs):
         self.object = None
@@ -329,5 +334,4 @@ class UsersListView(ListView):
         context['link_tabelas'] = '/database'
         context['usuarios'] = self.model.objects.all()
         return context
-    
     

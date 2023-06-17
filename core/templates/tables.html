@@ -42,7 +42,7 @@
                   <div class="full">
                      <div class="center-desk">
                         <div class="logo">
-                           <a href="index.html"><img src="{% static 'images/logo_alfa.png' %}" alt="#" /></a>
+                           <a href="{{ link_home }}"><img src="{% static 'images/logo_alfa.png' %}" alt="#" /></a>
                         </div>
                      </div>
                   </div>
@@ -120,7 +120,6 @@
                      {% comment %} <a class="read_more" href="Javascript:void(0)">Buy Now</a> {% endcomment %}
                   </div>
                </div>
-               {% comment %} {% endif %} {% endcomment %}
                {% endfor %}
             </div>
          </div>

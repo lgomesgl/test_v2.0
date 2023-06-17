@@ -17,6 +17,7 @@ class Base(models.Model):
         
 class Project(Base):
     name = models.CharField(max_length=100, unique=True)
+    start_date = models.DateField(null=True, blank=True)
     over_date = models.DateField(null=True, blank=True)
     
     def __str__(self):
