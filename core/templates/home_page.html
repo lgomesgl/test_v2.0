@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
    <head>
       <!-- basic -->
       <meta charset="utf-8">
@@ -55,10 +55,10 @@
                      <div class="collapse navbar-collapse" id="navbarsExample04">
                         <ul class="navbar-nav mr-auto">
                            <li class="nav-item">
-                              <a class="nav-link" href="{{ link_tabelas }}">Database</a>
+                              <a class="nav-link" href="{{ link_database }}">Database</a>
                            </li>
                            <li class="nav-item">
-                              <a class="nav-link" href="{{ link_usuarios }}">Users</a>
+                              <a class="nav-link" href="{{ link_users }}">Users</a>
                            </li>
                            {% comment %} <li class="nav-item">
                               <a class="nav-link" href="{{ link_empresas_form }}">Empresas</a>
@@ -508,13 +508,13 @@
                <div class="row">
                   <div class="col-lg-3 col-md-6 col-sm-6">
                      <div class="infoma text_align_left">
-                        <h3>Choose.</h3>
+                        <h3>Services</h3>
                         <ul class="commodo">
-                           <li>Commodo</li>
-                           <li>consequat. Duis a</li>
-                           <li>ute irure dolor</li>
-                           <li>in reprehenderit </li>
-                           <li>in voluptate </li>
+                           <li><a href='{{ link_home }}'>Home</a></li>
+                           <li><a href='{{ link_create_user }}'>CreateUser</a></li>
+                           <li><a href='{{ link_about }}'>About</a></li>
+                           <li><a href='{{ link_database }}'>Database</a></li>
+                           <li><a href='{{ link_users }}'>Users</a></li>
                         </ul>
                      </div>
                   </div>
@@ -533,7 +533,7 @@
                      <div class="infoma">
                         <h3>Database</h3>
                         <ul class="menu_footer">
-                           {% for database in databases %}
+                           {% for database in databases_detail %}
                            <li><a href="{{ database.link_detail }}">{{ database.nome }}</a></li>
                            {% endfor %}
                            {% comment %} <li><a href="{{ link_empresas_form }}">Empresas</a></li>
@@ -561,7 +561,7 @@
                <div class="container">
                   <div class="row">
                      <div class="col-md-12">
-                        <p>© 2023 lucas gomes-aluno de inciação científica<a href="https://html.design/"></a></p>
+                        <p>© 2023 lucas gomes- Graduate Student<a href="https://html.design/"></a></p>
                      </div>
                   </div>
                </div>

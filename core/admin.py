@@ -23,7 +23,7 @@ class CustomUserAdmin(UserAdmin):
     
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ['name', 'over_date']
+    list_display = ['name', 'start_date', 'over_date']
     search_fields = ['name']
     
 @admin.register(SponsorCompany)

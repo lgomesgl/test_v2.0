@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
    <head>
       <!-- basic -->
       <meta charset="utf-8">
@@ -104,11 +104,6 @@
                             <th>Modify Date</th>
                         </tr>
                         {% for instance in instances %}
-                        {% comment %} {% if table == 'files' %}
-                        <tr>  
-                           <td><a href="update/{{ instance.id }}">{{ instance.file }}</a></td>
-                        </tr>  
-                        {% else %}                       {% endcomment %}
                         {% if action == 'update' %}
                            <tr>  
                               <td><a href="update/{{ instance.id }}">{{ instance }}</a></td>

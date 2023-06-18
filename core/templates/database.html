@@ -60,9 +60,10 @@
                            <li class="nav-item">
                               <a class="nav-link" href="{{ link_about }}">About</a>
                            </li>
-                           {% comment %} <li class="nav-item active">
-                              <a class="nav-link" href="hosting.html">Hosting</a>
+                           <li class="nav-item">
+                              <a class="nav-link" href="{{ link_users }}">Users</a>
                            </li>
+                           {% comment %} 
                            <li class="nav-item">
                               <a class="nav-link" href="domain.html">Domain</a>
                            </li>
@@ -110,7 +111,7 @@
                         {% comment %} <p>STARTING  <span>$9</span> PER MONTH</p> {% endcomment %}
                         {% comment %} <a href="{{ link_projetos_form }}">Personal use</a> {% endcomment %}
                         <ul class="supp">
-                           <li><a href="{{ table.link_create }}">Add</a></li> <!-- How to fiz that?? forloop.counter0 ?-->
+                           <li><a href="{{ table.link_create }}">Add</a></li> 
                            <li><a href="{{ table.link_update }}">Modify</a></li>
                            <li><a href="{{ table.link_delete }}">Delete</a></li>
                            {% comment %} <li>Unlimited projects</li>

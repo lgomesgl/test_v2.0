@@ -24,7 +24,7 @@ class CustomUserChangeForm(UserChangeForm):
 class ProjectModelForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['name', 'over_date']
+        fields = ['name', 'start_date', 'over_date']
 
 class SponsorComponyModelForm(forms.ModelForm):
     class Meta:

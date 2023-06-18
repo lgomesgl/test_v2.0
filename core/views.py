@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import permission_required
 from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
 from django.http import HttpRequest, HttpResponse
-from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, ListView
+from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, ListView, DetailView
 from django.db import connection, models
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
@@ -20,7 +20,7 @@ from .models import CustomUser, Project, SponsorCompany, People, Email, Reasearc
 # --------------------------------------------------- Home page ---------------------------------------------------------------
 '''
     TemplateView
-    Just show a html
+    Just show a the home page with all acess
 '''
 class HomePageTemplateView(TemplateView):
     template_name = 'home_page.html'
@@ -30,13 +30,13 @@ class HomePageTemplateView(TemplateView):
         context['link_admin'] = '/admin'
         context['link_create_user'] = '/create_user'
         context['link_about'] = '/about'
-        context['link_tabelas'] = '/database'
-        context['link_usuarios'] = '/users'
+        context['link_database'] = '/database'
+        context['link_users'] = '/users'
         
-        context['databases'] = []
+        context['databases_detail'] = []
         tables = ['project','sponsor_compony','people','email','reasearch_lines','metadata','files','videos','articles']      
         for table in tables:
-            context['databases'].append({'nome':'%s' % table, 'link_detail':'database/%s/detail' % table})
+            context['databases_detail'].append({'nome':'%s' % table, 'link_detail':'database/%s/detail' % table})
         return context 
     
 # -------------------------------------------------- Create User --------------------------------------------------------------------------------------
@@ -84,25 +84,33 @@ class AboutTemplateView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['link_admin'] = '/admin'
         context['link_home'] = 'http://127.0.0.1:8000/'
-        context['link_tables'] = '/database'
+        context['link_create_user'] = '/create_user'
+        context['link_database'] = '/database'
         context['link_users'] = '/users'
+        
+        context['databases_detail'] = []
+        tables = ['project','sponsor_compony','people','email','reasearch_lines','metadata','files','videos','articles']      
+        for table in tables:
+            context['databases_detail'].append({'nome':'%s' % table, 'link_detail':'database/%s/detail' % table})
+            
         return context 
     
 # ------------------------------------------------- Tables --------------------------------------------------------------------------------------------
 '''
     Show the tables and link with create/update/delete instances for each tables
 '''
-class TablesTemplateView(TemplateView):
+class DatabaseTemplateView(TemplateView):
     '''
         Permissions
     '''
-    template_name = 'tables.html'
+    template_name = 'database.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['link_home'] = 'http://127.0.0.1:8000/'
         context['link_about'] = '/about'
         context['link_admin'] = '/admin'
+        context['link_users'] = '/users'
         
         # tables = connection.introspection.table_name()
         # seen_models = connection.introspection.installed_models(tables)
@@ -115,14 +123,16 @@ class TablesTemplateView(TemplateView):
 
         return context 
   
-# Tables/view
+# Tables/detail
+class DatabaseDetailView(DetailView):
+    pass
 
 # Tables/create
 '''
     One view which works for all create forms.
 '''
-class TablesCreateView(CreateView):
-    template_name = 'tables_create.html'
+class DatabaseCreateView(CreateView):
+    template_name = 'database_create.html'
     
     def get(self, request, *args, **kwargs):
         '''
@@ -173,24 +183,24 @@ class TablesCreateView(CreateView):
         return super().post(request, *args, **kwargs)
     
     def form_valid(self, form):
-        messages.success(self.request, 'New registered user')
-        return super(TablesCreateView, self).form_valid(form)
+        messages.success(self.request, 'New %s registered' % self.table )
+        return super(DatabaseCreateView, self).form_valid(form)
     
     def form_invalid(self, form): 
         messages.error(self.request, 'Erro to register') 
-        return super(TablesCreateView, self).form_invalid(form)
+        return super(DatabaseCreateView, self).form_invalid(form)
     
     def get_success_url(self):
         self.success_url = self.request.path
         return super().get_success_url()
     
 # Table/update
-class TableListView(ListView):
+class DatabaseListView(ListView):
     '''
         First show all instances in table.
         Link the path to TableUpdateView
     '''
-    template_name = 'tables_list.html'
+    template_name = 'database_list.html'
     
     def get(self, request, *args, **kwargs):
         self.object = None
@@ -223,11 +233,11 @@ class TableListView(ListView):
         context['instances'] = self.model.objects.all()
         return context
 
-class TableUpdateView(UpdateView):
+class DatabaseUpdateView(UpdateView):
     '''
         Get the id of the instance and update in model
     '''
-    template_name = 'tables_update.html'
+    template_name = 'database_update.html'
     fields = "__all__"
     
     def get(self, request, *args, **kwargs):
@@ -261,21 +271,21 @@ class TableUpdateView(UpdateView):
 
     def form_valid(self, form):
         messages.success(self.request, 'Update completed')
-        return super(TableUpdateView, self).form_valid(form)
+        return super(DatabaseUpdateView, self).form_valid(form)
     
     def form_invalid(self, form):
         messages.error(self.request, 'Erro to update')
-        return super().form_invalid(form)
+        return super(DatabaseUpdateView, self).form_invalid(form)
     
     def get_success_url(self):
         self.success_url = self.request.path
         return super().get_success_url()
     
-class TableDeleteView(DeleteView):
+class DatabaseDeleteView(DeleteView):
     '''
         Delete the instance of table
     '''
-    template_name = 'tables_delete.html'
+    template_name = 'database_delete.html'
     
     def get(self, request, *args, **kwargs):
         self.object = None
@@ -313,12 +323,12 @@ class TableDeleteView(DeleteView):
         return super().post(request, *args, **kwargs)
     
     def get_success_url(self, **kwargs):
-        self.success_url = reverse_lazy('tables-list', kwargs = {'table': self.table, 'action': 'delete'})
+        self.success_url = reverse_lazy('data-list', kwargs = {'table': self.table, 'action': 'delete'})
         return super().get_success_url()
     
 # ---------------------------------- users ----------------------------------------------------
 '''
-    ListView  -> List all users 
+    ListView  -> List all users in DBA
 '''
 class UsersListView(ListView):
     template_name = 'users.html'
@@ -331,7 +341,8 @@ class UsersListView(ListView):
         context = super().get_context_data(**kwargs)
         context['index'] = 'home'
         context['link_admin'] = '/admin'
-        context['link_tabelas'] = '/database'
+        context['link_about'] = '/about'
+        context['link_database'] = '/database'
         context['usuarios'] = self.model.objects.all()
         return context
     

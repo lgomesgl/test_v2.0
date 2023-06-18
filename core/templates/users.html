@@ -59,11 +59,12 @@
                               <a class="nav-link" href="{{ link_home }}">Home</a>
                            </li>
                            <li class="nav-item">
-                              <a class="nav-link" href="{{ link_tabelas }}">Database</a>
+                              <a class="nav-link" href="{{ link_about }}">About</a>
                            </li>
-                           {% comment %} <li class="nav-item active">
-                              <a class="nav-link" href="hosting.html">Hosting</a>
+                           <li class="nav-item">
+                              <a class="nav-link" href="{{ link_database }}">Database</a>
                            </li>
+                           {% comment %} 
                            <li class="nav-item">
                               <a class="nav-link" href="domain.html">Domain</a>
                            </li>
@@ -103,7 +104,7 @@
                             <th>Email</th>
                             {% comment %} <th>staff</th> {% endcomment %}
                             <th>Group view</th>
-                            {% comment %} <th>Grupos</th> {% endcomment %}
+                            {% comment %} <th>Projects</th> {% endcomment %}
                             {% comment %} <th>Ultimo login</th> {% endcomment %}
                         </tr>
                         {% for users in usuarios %}
@@ -116,7 +117,7 @@
                             {% else %}
                             <td>{{ users.group}}</td>
                             {% endif %}
-                            {% comment %} <td>{{ users.last_login }}</td> {% endcomment %}
+                            {% comment %} <td>{{ project.get() }}</td> {% endcomment %}
                         </tr>
                         {% endif %}
                         {% endfor %}
