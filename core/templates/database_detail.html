@@ -10,7 +10,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>{{ table }} - List</title>
+      <title>Datail{ table } - DBA</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -43,7 +43,7 @@
                   <div class="full">
                      <div class="center-desk">
                         <div class="logo">
-                           <a href="{{ link_home }}"><img src="{% static 'images/logo_alfa.png' %}" alt="#" /></a>
+                           <a href="{{ index }}"><img src="{% static 'images/logo_alfa.png' %}" alt="#" /></a>
                         </div>
                      </div>
                   </div>
@@ -62,7 +62,7 @@
                               <a class="nav-link" href="{{ link_about }}">About</a>
                            </li>
                            <li class="nav-item">
-                              <a class="nav-link" href="{{ link_tables }}">Database</a>
+                              <a class="nav-link" href="{{ link_database }}">Database</a>
                            </li>
                            {% comment %} 
                            <li class="nav-item">
@@ -95,21 +95,31 @@
             <div class="row">
                <div class="col-md-8 offset-md-2">
                   <div class="titlepage text_align_center">
-                     <h2>{{ table }}<br> <span class="blue_light"></span></h2>
+                     <h2>Users<br> <span class="blue_light"></span></h2>
                      {% comment %} <p>Seleciona um para poder adicionar/mofidificar/deletar uma instância delas.
                      </p> {% endcomment %}
                      <table class='table'>
                         <tr>
-                            <th>Name</th> 
-                            <th>Create Date</th>
-                            <th>Modify Date</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            {% comment %} <th>staff</th> {% endcomment %}
+                            <th>Group view</th>
+                            {% comment %} <th>Projects</th> {% endcomment %}
+                            {% comment %} <th>Ultimo login</th> {% endcomment %}
                         </tr>
-                        {% for instance in instances %}
+                        {% for users in usuarios %}
+                        {% if users.is_active %}
                         <tr>  
-                           <td><a href="{{ action }}/{{ instance.id }}">{{ instance }}</a></td>
-                           <td>{{ instance.Creates_date }}</td>
-                           <td>{{ instance.Modify_date }}</td>
+                            <td><a href="{{ link_home }}">{{ users.first_name }} {{ users.last_name }}</a></td>
+                            <td>{{ users.email }}</td>
+                            {% if users.is_superuser %}
+                            <td>Admin</td>
+                            {% else %}
+                            <td>{{ users.group}}</td>
+                            {% endif %}
+                            {% comment %} <td>{{ project.get() }}</td> {% endcomment %}
                         </tr>
+                        {% endif %}
                         {% endfor %}
                     </table>
                   </div>

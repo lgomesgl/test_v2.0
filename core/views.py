@@ -124,9 +124,37 @@ class DatabaseTemplateView(TemplateView):
         return context 
   
 # Tables/detail
+'''
+    Template with the datails of the instance
+'''
 class DatabaseDetailView(DetailView):
-    pass
+    template_name = 'database_detail.html'
+    
+    def get(self, request, *args, **kwargs):
+        self.object = None
+        self.table = kwargs['table']
+        return super().get(request, *args, **kwargs)
 
+    def get_queryset(self):
+        MODELS = {
+            "project": Project,
+            "sponsor_compony": SponsorCompany,
+            "people": People,
+            "email": Email,
+            "reasearch_lines": ReasearchLines,
+            "metadata": Metadata,
+            "files": Files,
+            "videos": Videos,
+            "articles": Articles,
+        }
+        self.model = MODELS[self.table]
+        return super().get_queryset()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        context['table'] = self.table     
+        return context 
+    
 # Tables/create
 '''
     One view which works for all create forms.
@@ -310,12 +338,12 @@ class DatabaseDeleteView(DeleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['table'] = self.table
-        context['name'] = self.model.objects.all().get(id=self.kwargs.get(self.pk_url_kwarg))
+        context['name_of_delete_instance'] = self.model.objects.all().get(id=self.kwargs.get(self.pk_url_kwarg))
         return context
     
-    # def form_valid(self, form):
-    #     messages.success(self.request, '%s deleted' % (self.model.objects.all().get(id=self.kwargs.get(self.pk_url_kwarg))))
-    #     return super(TableDeleteView, self).form_valid(form)   
+    def form_valid(self, form):
+        messages.success(self.request, '%s deleted' % (self.model.objects.all().get(id=self.kwargs.get(self.pk_url_kwarg))))
+        return super(DatabaseDeleteView, self).form_valid(form)   
     
     def post(self, request, *args, **kwargs):
         self.object = None
@@ -323,7 +351,7 @@ class DatabaseDeleteView(DeleteView):
         return super().post(request, *args, **kwargs)
     
     def get_success_url(self, **kwargs):
-        self.success_url = reverse_lazy('data-list', kwargs = {'table': self.table, 'action': 'delete'})
+        self.success_url = reverse_lazy('database-list', kwargs = {'table': self.table, 'action': 'delete'})
         return super().get_success_url()
     
 # ---------------------------------- users ----------------------------------------------------

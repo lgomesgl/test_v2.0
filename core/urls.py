@@ -8,10 +8,10 @@ urlpatterns = [
     # path('create_user/edit', CreateUserUpdateView.as_view(), name='create_user/edit'),
     path('about/', AboutTemplateView.as_view(), name='about'),
     path('database/', DatabaseTemplateView.as_view(), name='database'),
-    path('database/<str:table>/add', DatabaseCreateView.as_view(), name='data-add'),
-    path('database/<str:table>/<str:action>', DatabaseListView.as_view(), name='data-list'), # <str:action> -> can be detail, update or delete
-    path('database/<str:table>/datail/<int:pk>', DatabaseDetailView.as_view(), name='data-detail'),
-    path('database/<str:table>/update/<int:pk>', DatabaseUpdateView.as_view(), name='data-update'),
-    path('database/<str:table>/delete/<int:pk>', DatabaseDeleteView.as_view(), name='data-delete'),
+    path('database/<str:table>/add', DatabaseCreateView.as_view(), name='database-add'),
+    path('database/<str:table>/<str:action>', DatabaseListView.as_view(), name='database-list'), # <str:action> -> can be detail, update or delete
+    path('database/<str:table>/detail/<int:pk>', DatabaseDetailView.as_view(), name='database-detail'),
+    path('database/<str:table>/update/<int:pk>', DatabaseUpdateView.as_view(), name='database-update'),
+    path('database/<str:table>/delete/<int:pk>', DatabaseDeleteView.as_view(), name='database-delete'),
     path('users/', UsersListView.as_view(), name='users'),
 ]

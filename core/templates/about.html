@@ -106,12 +106,12 @@
                         O banco de dados foi criado para facilitar a manipulação de dados gerados nos experimentos do grupo ALFA e facilitar a comunicação entre as empresas patrocinadoras e seus protejos. Cada usuário do banco terá suas devidas permissões para manipular os dados presentes nele.
                      </p>
                      {% comment %} <a class="read_more" href="">Read More</a> <!-- Aqui irá redirecionar para uma modelagem do banco de dados --> {% endcomment %}
-                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">
                         Database Model
                      </button>
                      <!-- Modal -->
-                     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
+                     <div class="modal fade bd-example-modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
                            <div class="modal-content">
                               <div class="modal-header">
                                  <h5 class="modal-title" id="exampleModalLongTitle">Database Model</h5>
@@ -120,7 +120,7 @@
                                  </button>
                               </div>
                               <div class="modal-body">
-                                 <img src="{% static 'images/modelagem_banco.png' %}" height ="90" width="480"/>
+                                 <img src="{% static 'images/modelagem.png' %}" height ="90" width="480"/>
                               </div>
                               <div class="modal-footer">
                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -143,7 +143,7 @@
                   <div class="col-lg-3 col-md-6 col-sm-6">
                      <div class="infoma text_align_left">
                         <h3>Services</h3>
-                        <ul class="commodo">
+                        <ul class="menu_footer">
                            <li><a href='{{ link_home }}'>Home</a></li>
                            <li><a href='{{ link_create_user }}'>CreateUser</a></li>
                            <li><a href='{{ link_about }}'>About</a></li>
